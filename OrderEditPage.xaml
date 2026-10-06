@@ -1,0 +1,278 @@
+﻿<Page x:Class="KharisovaObuv.OrderEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:KharisovaObuv"
+      mc:Ignorable="d"
+      d:DesignHeight="700"
+      d:DesignWidth="1100"
+      Title="OrderEditPage"
+      FontFamily="Calibri"
+      Background="White">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="75"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- Заголовок -->
+        <Border Grid.Row="0"
+                Background="#D2F6E7">
+
+            <TextBlock Text="Создание заказа"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="25,0"/>
+
+        </Border>
+
+
+        <!-- Информация о заказе -->
+        <Grid Grid.Row="1"
+              Margin="25,20,25,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+
+            <TextBlock Grid.Column="0"
+                       Text="Клиент:"
+                       FontSize="16"
+                       VerticalAlignment="Center"/>
+
+            <ComboBox x:Name="ClientCB"
+                      Grid.Column="1"
+                      Height="30"
+                      Margin="5,0"
+                      FontSize="15"/>
+
+
+            <TextBlock Grid.Column="2"
+                       Text="Дата:"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"/>
+
+            <DatePicker x:Name="OrderDateDP"
+                        Grid.Column="3"
+                        Height="30"
+                        Margin="5,0"
+                        FontSize="15"/>
+
+        </Grid>
+
+
+        <!-- Добавление товарной позиции -->
+        <Border Grid.Row="2"
+                Margin="25,10"
+                Padding="15"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Добавление товарной позиции"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,15"/>
+
+
+                <Grid Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- Товар -->
+                    <TextBlock Grid.Column="0"
+                               Text="Товар:"
+                               FontSize="15"
+                               VerticalAlignment="Center"/>
+
+                    <ComboBox x:Name="ProductCB"
+                              Grid.Column="1"
+                              Height="30"
+                              Margin="5,0"
+                              FontSize="15"
+                              DisplayMemberPath="ProductName"
+                              SelectionChanged="ProductCB_SelectionChanged"/>
+
+
+                    <!-- Размер -->
+                    <TextBlock Grid.Column="2"
+                               Text="Размер:"
+                               FontSize="15"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+
+                    <ComboBox x:Name="SizeCB"
+                              Grid.Column="3"
+                              Height="30"
+                              Margin="5,0"
+                              FontSize="15"
+                              DisplayMemberPath="SizeValue"
+                              SelectionChanged="SizeCB_SelectionChanged"/>
+
+
+                    <!-- Количество -->
+                    <TextBlock Grid.Column="4"
+                               Text="Количество:"
+                               FontSize="15"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+
+                    <TextBox x:Name="QuantityTB"
+                             Grid.Column="5"
+                             Height="30"
+                             Margin="5,0"
+                             FontSize="15"
+                             Text="1"
+                             TextAlignment="Center"/>
+
+
+                    <!-- Остаток -->
+                    <TextBlock x:Name="StockTB"
+                               Grid.Column="6"
+                               Text="В наличии: -"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="10,0"/>
+
+
+                    <!-- Добавить -->
+                    <Button x:Name="AddItemBtn"
+                            Grid.Column="7"
+                            Content="Добавить"
+                            Width="130"
+                            Height="32"
+                            Background="#70B2AF"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="15"
+                            Click="AddItemBtn_Click"/>
+
+                </Grid>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- Состав заказа -->
+        <DataGrid x:Name="OrderItemsDG"
+          Grid.Row="3"
+          Margin="25,5,25,10"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          SelectionMode="Single"
+          FontSize="14"
+          CellEditEnding="OrderItemsDG_CellEditEnding">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Товар"
+                                    Binding="{Binding ProductName}"
+                                    Width="*"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Размер"
+                                    Binding="{Binding SizeValue}"
+                                    Width="100"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Количество"
+                                    Binding="{Binding Quantity}"
+                                    Width="120"/>
+
+                <DataGridTextColumn Header="Цена, руб."
+                                    Binding="{Binding UnitPrice, StringFormat={}{0:0.00}}"
+                                    Width="120"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Сумма, руб."
+                                    Binding="{Binding LineTotal, StringFormat={}{0:0.00}}"
+                                    Width="130"
+                                    IsReadOnly="True"/>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+        <!-- Нижняя панель -->
+        <Grid Grid.Row="4"
+              Margin="25,5,25,15">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="170"/>
+            </Grid.ColumnDefinitions>
+
+
+            <TextBlock x:Name="TotalTB"
+                       Grid.Column="0"
+                       Text="Итого: 0 руб."
+                       FontSize="21"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"/>
+
+
+            <Button x:Name="DeleteItemBtn"
+                    Grid.Column="1"
+                    Content="Удалить позицию"
+                    Width="150"
+                    Height="36"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#70B2AF"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="15"
+                    Click="DeleteItemBtn_Click"/>
+
+
+            <Button x:Name="SaveOrderBtn"
+                    Grid.Column="2"
+                    Content="Сохранить заказ"
+                    Width="150"
+                    Height="36"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#70B2AF"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="15"
+                    Click="SaveOrderBtn_Click"/>
+
+        </Grid>
+
+    </Grid>
+
+</Page>

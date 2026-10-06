@@ -1,0 +1,258 @@
+﻿<Page x:Class="KharisovaObuv.ProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:KharisovaObuv"
+      mc:Ignorable="d"
+      d:DesignHeight="800"
+      d:DesignWidth="1200"
+      Title="ProductPage"
+      FontFamily="Calibri"
+      Background="White">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- Заголовок -->
+        <Border Grid.Row="0"
+                Background="#D2F6E7">
+
+            <TextBlock Text="Каталог товаров"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="25,0"/>
+
+        </Border>
+
+
+        <!-- Поиск, сортировка, фильтрация -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    Margin="20,15,20,5">
+
+            <TextBlock Text="Поиск:"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0"/>
+
+            <TextBox x:Name="SearchTB"
+                     Width="300"
+                     Height="30"
+                     FontSize="16"
+                     TextChanged="SearchTB_TextChanged"/>
+
+
+            <TextBlock Text="Сортировка:"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="30,0,10,0"/>
+
+            <ComboBox x:Name="SortCB"
+                      Width="220"
+                      Height="30"
+                      FontSize="15"
+                      SelectionChanged="SortCB_SelectionChanged">
+
+                <ComboBoxItem Content="Без сортировки"/>
+                <ComboBoxItem Content="Цена по возрастанию"/>
+                <ComboBoxItem Content="Цена по убыванию"/>
+
+            </ComboBox>
+
+
+            <TextBlock Text="Категория:"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="30,0,10,0"/>
+
+            <ComboBox x:Name="FilterCB"
+                      Width="200"
+                      Height="30"
+                      FontSize="15"
+                      DisplayMemberPath="CategoryName"
+                      SelectionChanged="FilterCB_SelectionChanged"/>
+
+        </StackPanel>
+
+
+        <!-- Список товаров -->
+        <ListView x:Name="ProductListView"
+                  Grid.Row="2"
+                  Margin="15"
+                  BorderThickness="0"
+                  Background="White"
+                  SelectionChanged="ProductListView_SelectionChanged"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            <ListView.ItemContainerStyle>
+
+                <Style TargetType="ListViewItem">
+
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch"/>
+
+                    <Setter Property="Padding"
+                            Value="0"/>
+
+                    <Setter Property="Margin"
+                            Value="0"/>
+
+                </Style>
+
+            </ListView.ItemContainerStyle>
+
+
+            <ListView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Border BorderBrush="#DDDDDD"
+                            BorderThickness="0,0,0,1"
+                            Padding="10,12"
+                            Background="{Binding StockColor}">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="160"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <!-- Фото -->
+                            <Image Grid.Column="0"
+                                   Width="115"
+                                   Height="115"
+                                   Margin="5"
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+
+                                <Image.Source>
+
+                                    <Binding Path="PhotoPath">
+
+                                        <Binding.TargetNullValue>
+                                            /res/picture.png
+                                        </Binding.TargetNullValue>
+
+                                    </Binding>
+
+                                </Image.Source>
+
+                            </Image>
+
+
+                            <!-- Информация о товаре -->
+                            <StackPanel Grid.Column="1"
+                                        Margin="15,0,25,0"
+                                        VerticalAlignment="Center">
+
+                                <TextBlock Text="{Binding ProductName}"
+                                           FontSize="19"
+                                           FontWeight="Bold"
+                                           TextWrapping="Wrap"/>
+
+                                <TextBlock Text="{Binding Description}"
+                                           FontSize="15"
+                                           Margin="0,6,0,0"
+                                           Foreground="#555555"
+                                           TextWrapping="Wrap"/>
+
+                                <TextBlock Text="{Binding Composition, StringFormat=Состав: {0}}"
+                                           FontSize="14"
+                                           Margin="0,6,0,0"
+                                           TextWrapping="Wrap"/>
+
+                                <TextBlock Text="{Binding TotalQuantity, StringFormat=Остаток: {0} шт.}"
+                                           FontSize="14"
+                                           FontWeight="Bold"
+                                           Margin="0,6,0,0"/>
+
+                            </StackPanel>
+
+
+                            <!-- Цена -->
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Price, StringFormat={}{0:0} руб.}"
+                                       FontSize="19"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"
+                                       Margin="10"/>
+
+                        </Grid>
+
+                    </Border>
+
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+
+        <!-- Нижняя панель кнопок -->
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="20">
+
+
+            <!-- Только менеджер и администратор -->
+            <Button x:Name="OrdersBtn"
+                    Content="Заказы"
+                    Width="130"
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Background="#70B2AF"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="15"
+                    Visibility="Collapsed"
+                    Click="OrdersBtn_Click"/>
+
+
+            <!-- Появляется после выбора товара -->
+            <Button x:Name="AddToOrderBtn"
+                    Content="Добавить в заказ"
+                    Width="160"
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Background="#70B2AF"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="15"
+                    Visibility="Collapsed"
+                    Click="AddToOrderBtn_Click"/>
+
+
+            <!-- Текущий создаваемый заказ -->
+            <Button x:Name="OpenOrderBtn"
+                    Content="Текущий заказ"
+                    Width="150"
+                    Height="35"
+                    Background="#70B2AF"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="15"
+                    Visibility="Collapsed"
+                    Click="OpenOrderBtn_Click"/>
+
+        </StackPanel>
+
+    </Grid>
+
+</Page>
